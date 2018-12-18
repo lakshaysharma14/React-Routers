@@ -1,23 +1,32 @@
 import React , {Component} from 'react';
+import axios from 'axios';
 
 class Post extends Component
 {
 	state=
 	{
-		id:null
+		post:null
 	}
 
 	componentDidMount()
 	{
-		console.log(this.props)     
-
+		    
 		//we get all the route information as props automatically when we use Psot component as a route parameter
 
 		let id = this.props.match.params.post_id;
 
-		this.setState
-		({
-			id:id
+		axios.get('https://jsonplaceholder.typicode.com/posts/' + id) 
+
+		.then(res =>{
+
+
+			this.setState
+			({
+				post:res.data
+			})
+
+
+			
 		})
 	}
 
@@ -25,11 +34,20 @@ class Post extends Component
 
 	render()
 	{
-		const {id} =this.state;
+		const post = this.state.post ? (
+			<div className="post">
+				<h4 className="center">{this.state.post.title}</h4>
+				<p>{this.state.post.body}</p>
+			</div>
+		)
+		:
+		(
+		<div className="center">Loading Post.....</div>
+		)
+		
 		return(
 			<div className="container">
-				<h4>Route Parameters</h4>
-				<h6>{id}</h6>
+				{post}
 			</div>
 
 
